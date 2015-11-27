@@ -1,0 +1,25 @@
+{
+	"name": "diskerror/utilities",
+	"type": "library",
+	"description": "PHP classes to wrap and inhance standard PHP features.",
+	"keywords": ["curl", "date", "datetime", "registry", "ldap"],
+	"homepage": "https://github.com/diskerror/Utilities",
+	"license": "Apache-2.0",
+	"authors": [
+		{
+			"name": "Reid Woodbury",
+			"email": "reidw@rawsound.com",
+			"homepage": "http://www.rawsound.com",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.4",
+        "zendframework/zend-ldap": "^2.4"
+	},
+	"autoload": {
+		"psr-4": {
+			"Diskerror\\Utilities\\": "/"
+		}
+	}
+}
