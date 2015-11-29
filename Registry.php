@@ -2,7 +2,7 @@
 
 namespace Diskerror\Utilities;
 
-use ArrayAccess;
+use ArrayAccess, OutOfBoundsException;
 
 /**
  * Provides a registry with LIFO (last in first out) behavior.
@@ -34,14 +34,13 @@ class Registry implements ArrayAccess
 	 * Array of items to store.
 	 * @var array
 	 */
-	protected $_registry;
+	protected $_registry = [];
 
 	/**
 	 * Public constructor.
 	 */
 	public function __construct()
 	{
-		$this->_registry = [];
 	}
 
 	/**
@@ -70,108 +69,6 @@ class Registry implements ArrayAccess
 	}
 
 	/**
-	 * Sets a value to the named location.
-	 * Calls with keys that are not non-zero-length strings are pushed onto The Stack
-	 *	  without a named reference.
-	 *
-	 * @param string|int $key
-	 * @param mixed $value
-	 */
-	public function __set($key, $value)
-	{
-		if ( null === $key || '' === $key ) {
-			$this->_registry[] = $value;
-		}
-		else {
-			$this->_registry[$key] = $value;
-		}
-	}
-
-	/**
-	 * Sets a value to the named location.
-	 *
-	 * @param string|int $key
-	 * @param mixed $value
-	 */
-	public function offsetSet($key, $value)
-	{
-		if ( null === $key || '' === $key ) {
-			$this->_registry[] = $value;
-		}
-		else {
-			$this->_registry[$key] = $value;
-		}
-	}
-
-	/**
-	 * Retrieve value from the named location. If not set then return null.
-	 *
-	 * @param string|int $key
-	 * @return mixed
-	 */
-	public function __get($key)
-	{
-		return ( isset($this->_registry[$key]) ? $this->_registry[$key] : null );
-	}
-
-	/**
-	 * Retrieve value from the named location.
-	 *
-	 * @param string|int $key
-	 * @return mixed
-	 */
-	public function offsetGet($key)
-	{
-		return ( isset($this->_registry[$key]) ? $this->_registry[$key] : null );
-	}
-
-	/**
-	 * Checks if the the named location exists.
-	 *
-	 * @param string|int $key
-	 * @return bool
-	 */
-	public function __isset($key)
-	{
-		return isset($this->_registry[$key]);
-	}
-
-	/**
-	 * Checks if the the named location exists.
-	 *
-	 * @param string|int $key
-	 * @return bool
-	 */
-	public function offsetExists($key)
-	{
-		return isset($this->_registry[$key]);
-	}
-
-	/**
-	 * Unsets or clears the named location if it exists.
-	 *
-	 * @param string|int $key
-	 */
-	public function __unset($key)
-	{
-		if ( isset($this->_registry[$key]) ) {
-			unset($this->_registry[$key]);
-		}
-	}
-
-	/**
-	 * Unsets or clears the named location if it exists.
-	 *
-	 * @param string|int $key
-	 */
-	public function offsetUnset($key)
-	{
-		if ( isset($this->_registry[$key]) ) {
-			unset($this->_registry[$key]);
-		}
-	}
-
-	/**
 	 * Gets data from singleton instance.
 	 *
 	 * @param string|int $key
@@ -180,13 +77,7 @@ class Registry implements ArrayAccess
 	 */
 	public static function get($key)
 	{
-		$instance = self::getInstance();
-
-		if (!$instance->offsetExists($key)) {
-			throw new OutOfBoundsException("No entry is registered for key '$key'");
-		}
-
-		return $instance->offsetGet($key);
+		return self::getInstance()->offsetGet($key);
 	}
 
 	/**
@@ -199,6 +90,106 @@ class Registry implements ArrayAccess
 	public static function set($key, $value)
 	{
 		self::getInstance()->offsetSet($key, $value);
+	}
+
+	/**
+	 * Sets a value to the named location.
+	 * Calls with keys that are not non-zero-length strings are pushed onto The Stack
+	 *	  without a named reference.
+	 *
+	 * @param string|int $key
+	 * @param mixed $value
+	 */
+	public function __set($key, $value)
+	{
+		$key = (string) $key;
+
+		if ( array_key_exists($key, $this->_registry) ) {
+			throw new Exception("Key already exists.");
+		}
+
+		$this->_registry[$key] = $value;
+	}
+
+	/**
+	 * Sets a value to the named location.
+	 *
+	 * @param string|int $key
+	 * @param mixed $value
+	 */
+	public function offsetSet($key, $value)
+	{
+		$key = (string) $key;
+
+		if ( array_key_exists($key, $this->_registry) ) {
+			throw new Exception("Key already exists.");
+		}
+
+		$this->_registry[$key] = $value;
+	}
+
+	/**
+	 * Retrieve value from the named location. If not set then return null.
+	 *
+	 * @param string|int $key
+	 * @return mixed
+	 */
+	public function __get($key)
+	{
+		return $this->_registry[$key];
+	}
+
+	/**
+	 * Retrieve value from the named location.
+	 *
+	 * @param string|int $key
+	 * @return mixed
+	 */
+	public function offsetGet($key)
+	{
+		return $this->_registry[$key];
+	}
+
+	/**
+	 * Checks if the the named location exists.
+	 *
+	 * @param string|int $key
+	 * @return bool
+	 */
+	public function __isset($key)
+	{
+		return ( array_key_exists($key, $this->_registry) && isset($this->_registry[$key]) );
+	}
+
+	/**
+	 * Checks if the the named location exists.
+	 *
+	 * @param string|int $key
+	 * @return bool
+	 */
+	public function offsetExists($key)
+	{
+		return ( array_key_exists($key, $this->_registry) && isset($this->_registry[$key]) );
+	}
+
+	/**
+	 * Unsets or clears the named location if it exists.
+	 *
+	 * @param string|int $key
+	 */
+	public function __unset($key)
+	{
+		throw new Exception("Cannot unset a member.");
+	}
+
+	/**
+	 * Unsets or clears the named location if it exists.
+	 *
+	 * @param string|int $key
+	 */
+	public function offsetUnset($key)
+	{
+		throw new Exception("Cannot unset a member.");
 	}
 
 }
