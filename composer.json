@@ -15,7 +15,10 @@
 	],
 	"require": {
 		"php": ">=5.4",
-        "zendframework/zend-ldap": "^2.4"
+		"zendframework/zend-ldap": "^2.4"
+	},
+	"suggest": {
+		"zendframework/zend-ldap": "Required for the additional LDAP features."
 	},
 	"autoload": {
 		"psr-4": {
