@@ -10,9 +10,9 @@ PHP utilities accessible by Composer. Tested with PHP version 5.4.
 
 *Coding Style* updated with https://github.com/FriendsOfPHP/PHP-CS-Fixer.
 ````
-> php-cs-fixer fix --fixers=-parenthesis,concat_with_spaces,operators_spaces,phpdoc_params,phpdoc_scalar,phpdoc_indent,phpdoc_type_to_var,phpdoc_trim,phpdoc_no_empty_return,-phpdoc_separation,-indentation,-multiline_array_trailing_comma <<file>>
+> php-cs-fixer fix --level=symfony --fixers=-parenthesis,-concat_without_spaces,-extra_empty_lines,-function_call_space,-indentation,-multiline_array_trailing_comma,-phpdoc_separation,multiline_spaces_before_semicolon,newline_after_open_tag,phpdoc_var_to_type <<file>>
 ````
 "php-cs-fixer" leaves a combination of spaces and tabs which I change to tabs, and also this substitution is also made:
 ````
-s/^(\s*)\} (else|elseif)/\1\}\r\1\2/g
+s/^(\s*)\}\s*else/\1\}\n\1else/g
 ````

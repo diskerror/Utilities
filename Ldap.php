@@ -47,10 +47,8 @@ class Ldap extends Zend\Ldap\Ldap
 			}
 
 			ldap_control_paged_result_response($ldap, $search, $cookie);
-		}
-		while($cookie !== null && $cookie != '');
+		} while ($cookie !== null && $cookie != '');
 
 		return $result;
 	}
-
 }

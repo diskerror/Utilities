@@ -82,8 +82,7 @@ class DateTime extends DT
 	{
 		if ( $time === '' ) {
 			$parsed = date_parse($formatOrTime);
-		}
-		else {
+ {
 			$parsed = date_parse_from_format($formatOrTime, $time);
 		}
 
@@ -176,7 +175,7 @@ class DateTime extends DT
 
 			case 'array':
 			//	change all keys to lower case
-			$arrIn	= array_change_key_case($hou);
+			$arrIn = array_change_key_case($hou);
 
 			//	get current values as input can be incomplete
 			$hou = $this->format('G');

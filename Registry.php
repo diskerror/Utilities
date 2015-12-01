@@ -2,7 +2,8 @@
 
 namespace Diskerror\Utilities;
 
-use ArrayAccess, OutOfBoundsException;
+use ArrayAccess;
+use DomainException;
 
 /**
  * Provides a registry with LIFO (last in first out) behavior.
@@ -25,19 +26,20 @@ class Registry implements ArrayAccess
 
 	/**
 	 * Singleton instance of this class.
-	 * @var Diskerror\Utilities\Registry
+	 * @type Diskerror\Utilities\Registry
 	 * @static
 	 */
 	private static $_instance;
 
 	/**
 	 * Array of items to store.
-	 * @var array
+	 * @type array
 	 */
 	protected $_registry = [];
 
 	/**
 	 * Public constructor.
+	 * Allows for similar behavior as ZF1 Zend/Registry.php.
 	 */
 	public function __construct()
 	{
@@ -61,11 +63,7 @@ class Registry implements ArrayAccess
 	 */
 	public static function getInstance()
 	{
-		if ( !isset(self::$_instance) ) {
-			self::$_instance = new self();
-		}
-
-		return self::$_instance;
+		return ( isset(self::$_instance) ? self::$_instance : (self::$_instance = new self()) );
 	}
 
 	/**
@@ -73,7 +71,6 @@ class Registry implements ArrayAccess
 	 *
 	 * @param string|int $key
 	 * @return mixed
-	 * @throws OutOfBoundsException
 	 */
 	public static function get($key)
 	{
@@ -85,7 +82,6 @@ class Registry implements ArrayAccess
 	 *
 	 * @param string|int $key
 	 * @param mixed $value.
-	 * @return void
 	 */
 	public static function set($key, $value)
 	{
@@ -99,30 +95,32 @@ class Registry implements ArrayAccess
 	 *
 	 * @param string|int $key
 	 * @param mixed $value
+	 * @throws DomainException
 	 */
 	public function __set($key, $value)
 	{
 		$key = (string) $key;
 
 		if ( array_key_exists($key, $this->_registry) ) {
-			throw new Exception("Key already exists.");
+			throw new DomainException('Key already exists.');
 		}
 
 		$this->_registry[$key] = $value;
 	}
 
 	/**
-	 * Sets a value to the named location.
+	 * Sets a value to the new named location.
 	 *
 	 * @param string|int $key
 	 * @param mixed $value
+	 * @throws DomainException
 	 */
 	public function offsetSet($key, $value)
 	{
 		$key = (string) $key;
 
 		if ( array_key_exists($key, $this->_registry) ) {
-			throw new Exception("Key already exists.");
+			throw new DomainException('Key already exists.');
 		}
 
 		$this->_registry[$key] = $value;
@@ -173,23 +171,20 @@ class Registry implements ArrayAccess
 	}
 
 	/**
-	 * Unsets or clears the named location if it exists.
-	 *
 	 * @param string|int $key
+	 * @throws DomainException
 	 */
 	public function __unset($key)
 	{
-		throw new Exception("Cannot unset a member.");
+		throw new DomainException('Cannot unset a member.');
 	}
 
 	/**
-	 * Unsets or clears the named location if it exists.
-	 *
 	 * @param string|int $key
+	 * @throws DomainException
 	 */
 	public function offsetUnset($key)
 	{
-		throw new Exception("Cannot unset a member.");
+		throw new DomainException('Cannot unset a member.');
 	}
-
 }
