@@ -11,7 +11,7 @@ namespace Diskerror\Utilities;
  */
 abstract class Singleton
 {
-    /**
+	/**
 	 * Protected constructor.
 	 * Override to perform any initialization.
 	 */
@@ -26,20 +26,20 @@ abstract class Singleton
 	{
 	}
 
-    /**
+	/**
 	 * Returns the instance of the called class.
 	 *
-	 * @return  Diskerror\Utilities\Singleton
+	 * @return	Diskerror\Utilities\Singleton
 	 */
 	public static function getInstance()
 	{
-	    $calledClass = get_called_class();
-	    $registry = Registry::getInstance();
+		$calledClass = get_called_class();
+		$registry = Registry::getInstance();
 
-	    return (
-	    	isset($registry[$calledClass]) ?
-	    		$registry[$calledClass] :
-	    		($registry[$calledClass] = new $calledClass())
-	    );
+		return (
+			isset($registry[$calledClass]) ?
+				$registry[$calledClass] :
+				($registry[$calledClass] = new $calledClass())
+		);
 	}
 }
