@@ -2,11 +2,9 @@
 
 PHP utilities accessible by Composer. Tested with PHP version 5.4.
 
-*cli.php* is a command line entry point for a Zend Framework 1 application with parallel ZF2 access. Handling of parameters has not been tested nor designed with any intent. Suggestions are welcome. It is based on a script found here: http://webdevbyjoss.blogspot.com/2010/09/running-zend-framework-application-from.html.
-
 *Registry* is a singleton implementing *ArrayAccess* and object access with **LIFO**, Last-In-First-Out behavior.
 
-*DateTime* and *Date* add convenience methods to the built-in PHP *DateTime* class.
+*DateTime* and *Date* add convenience methods to the built-in PHP *DateTime* class. This includes the __toString method that returns a date-time string formatted for the default MySQL date-time format.
 
 *Coding Style* updated with https://github.com/FriendsOfPHP/PHP-CS-Fixer.
 ````

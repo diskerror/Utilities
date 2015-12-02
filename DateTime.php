@@ -6,12 +6,6 @@ use DateTime as DT;
 use DateTimeZone;
 use InvalidArgumentException;
 
-//	This will be run when file is loaded.
-if ( !defined('\Diskerror\Utilities\DATETIME_STRING_FORMAT') ) {
-	//	Default MySQL datetime format.
-	define('Diskerror\Utilities\DATETIME_STRING_FORMAT', 'Y-m-d H:i:s');
-}
-
 /**
  * This class adds convienence methods to the built-in DateTime.
  *
@@ -22,6 +16,11 @@ if ( !defined('\Diskerror\Utilities\DATETIME_STRING_FORMAT') ) {
  */
 class DateTime extends DT
 {
+    /**
+	 * Default MySQL datetime format.
+	 */
+	const STRING_IO_FORMAT = 'Y-m-d H:i:s';
+
 	/**
 	 * Accepts a DateTime object or;
 	 * Adds the ability to pass in an array or object with key names of variable
@@ -40,7 +39,7 @@ class DateTime extends DT
 		switch ( gettype($time) ) {
 			case 'object':
 			if ( is_a($time, 'DateTime') ) {
-				parent::__construct($time->format(DATETIME_STRING_FORMAT), $time->getTimezone());
+				parent::__construct($time->format(self::STRING_IO_FORMAT), $time->getTimezone());
 				break;
 			}
 			$time = (array) $time;
@@ -84,8 +83,7 @@ class DateTime extends DT
 	{
 		if ( $time === '' ) {
 			$parsed = date_parse($formatOrTime);
-		}
-		else {
+		} else {
 			$parsed = date_parse_from_format($formatOrTime, $time);
 		}
 
@@ -109,7 +107,7 @@ class DateTime extends DT
 	 */
 	public function __toString()
 	{
-		return $this->format(DATETIME_STRING_FORMAT);
+		return $this->format(self::STRING_IO_FORMAT);
 	}
 
 	/**

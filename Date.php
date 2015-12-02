@@ -6,11 +6,6 @@ use InvalidArgumentException;
 use LogicException;
 
 /**
- * @see Diskerror\Utilities\DateTime
- */
-require_once 'DateTime.php';
-
-/**
  * This class adds convienence methods for date-only to Diskerror\DateTime.
  *
  * Date and time can be passed in with objects or associative arrays.
@@ -111,6 +106,6 @@ class Date extends \Diskerror\Utilities\DateTime
 	 */
 	public function setTime($hou, $min = 0, $sec = 0)
 	{
-		throw new \LogicException('method not available in Date class');
+		throw new LogicException('method not available in Date class');
 	}
 }
