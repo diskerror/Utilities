@@ -3,7 +3,14 @@
 namespace Diskerror\Utilities;
 
 use DateTime as DT;
+use DateTimeZone;
 use InvalidArgumentException;
+
+//	This will be run when file is loaded.
+if ( !defined('\Diskerror\Utilities\DATETIME_STRING_FORMAT') ) {
+	//	Default MySQL datetime format.
+	define('Diskerror\Utilities\DATETIME_STRING_FORMAT', 'Y-m-d H:i:s');
+}
 
 /**
  * This class adds convienence methods to the built-in DateTime.
@@ -16,11 +23,6 @@ use InvalidArgumentException;
 class DateTime extends DT
 {
 	/**
-	 * Default MySQL datetime format.
-	 */
-	const DEFAULT_FORMAT = 'Y-m-d H:i:s';
-
-	/**
 	 * Accepts a DateTime object or;
 	 * Adds the ability to pass in an array or object with key names of variable
 	 *	   length but a minimum of 3 characters, upper or lower case.
@@ -32,16 +34,16 @@ class DateTime extends DT
 	public function __construct($time = 'now', $timezone = null)
 	{
 		if ( !is_a($timezone, 'DateTimeZone') ) {
-			$timezone = new \DateTimeZone(date_default_timezone_get());
+			$timezone = new DateTimeZone(date_default_timezone_get());
 		}
 
 		switch ( gettype($time) ) {
 			case 'object':
 			if ( is_a($time, 'DateTime') ) {
-				parent::__construct($time->format(self::DEFAULT_FORMAT), $time->getTimezone());
-
-				return;
+				parent::__construct($time->format(DATETIME_STRING_FORMAT), $time->getTimezone());
+				break;
 			}
+			$time = (array) $time;
 			case 'array':
 			parent::__construct('now', $timezone);
 			$this->setDate($time);
@@ -73,8 +75,8 @@ class DateTime extends DT
 	 * Create DateTime object defaults to something that will accept
 	 * the default MySQL datetime format of "Y-m-d H:i:s".
 	 *
-	 * @param string			$formatOrTime
-	 * @param string			$time -OPTIONAL
+	 * @param string		$formatOrTime
+	 * @param string		$time -OPTIONAL
 	 * @param DateTimeZone	$timezone -OPTIONAL
 	 * @return DateTime
 	 */
@@ -82,7 +84,8 @@ class DateTime extends DT
 	{
 		if ( $time === '' ) {
 			$parsed = date_parse($formatOrTime);
- {
+		}
+		else {
 			$parsed = date_parse_from_format($formatOrTime, $time);
 		}
 
@@ -99,13 +102,14 @@ class DateTime extends DT
 	}
 
 	/**
-	 * Returns string suitable for the default MySQL date format of "Y-m-d H:i:s".
+	 * Returns MySQL formatted string.
+	 * If a custom formatting is desired use DateTime::format($format).
 	 *
 	 * @return string
 	 */
 	public function __toString()
 	{
-		return $this->format(self::DEFAULT_FORMAT);
+		return $this->format(DATETIME_STRING_FORMAT);
 	}
 
 	/**
