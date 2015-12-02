@@ -1,6 +1,6 @@
 # PHP Utilities
 
-PHP utilities accessible by Composer. Tested with PHP version 5.4.
+PHP utilities tested with PHP version 5.4.
 
 *Registry* is a singleton implementing *ArrayAccess* and object access with **LIFO**, Last-In-First-Out behavior.
 
@@ -9,6 +9,8 @@ PHP utilities accessible by Composer. Tested with PHP version 5.4.
 *Sprintf* adds format specifiers useful for creating MySQL statements.
 
 *Singleton* uses *Registry* to store the "singleton" instances so this can be an abstract parent class.
+
+*Curl* wraps the PHP curl functions.
 
 ##Composer
 ```
