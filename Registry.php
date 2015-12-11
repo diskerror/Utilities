@@ -89,6 +89,28 @@ class Registry implements ArrayAccess
 	}
 
 	/**
+	 * Retrieve value from the named location. If not set then return null.
+	 *
+	 * @param string|int $key
+	 * @return mixed
+	 */
+	public function __get($key)
+	{
+		return $this->_registry[$key];
+	}
+
+	/**
+	 * Retrieve value from the named location.
+	 *
+	 * @param string|int $key
+	 * @return mixed
+	 */
+	public function offsetGet($key)
+	{
+		return $this->_registry[$key];
+	}
+
+	/**
 	 * Sets a value to the named location.
 	 * Calls with keys that are not non-zero-length strings are pushed onto The Stack
 	 *	  without a named reference.
@@ -124,28 +146,6 @@ class Registry implements ArrayAccess
 		}
 
 		$this->_registry[$key] = $value;
-	}
-
-	/**
-	 * Retrieve value from the named location. If not set then return null.
-	 *
-	 * @param string|int $key
-	 * @return mixed
-	 */
-	public function __get($key)
-	{
-		return $this->_registry[$key];
-	}
-
-	/**
-	 * Retrieve value from the named location.
-	 *
-	 * @param string|int $key
-	 * @return mixed
-	 */
-	public function offsetGet($key)
-	{
-		return $this->_registry[$key];
 	}
 
 	/**
@@ -186,5 +186,19 @@ class Registry implements ArrayAccess
 	public function offsetUnset($key)
 	{
 		throw new DomainException('Cannot unset a member.');
+	}
+
+	/**
+	 * Remove and return last member value.
+	 *
+	 * @return mixed
+	 */
+	public function pop()
+	{
+		if ( count($this->_registry) ) {
+			return array_pop($this->_registry);
+		}
+
+		return null;
 	}
 }
