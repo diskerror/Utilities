@@ -2,13 +2,14 @@
 
 namespace Diskerror\Utilities;
 
-use Zend;
+use Zend\Ldap as Lp;
+use Zend\Stdlib;
 
 /**
  * Extends the ZF2 LDAP class to gather all results when paging is required.
  * Code borrowed from Zend\Ldap\Ldap::search 2.4.2 and the PHP manual.
  */
-class Ldap extends Zend\Ldap\Ldap
+class Ldap extends Lp\Ldap
 {
 	const PAGE_SIZE = 100;
 
@@ -38,10 +39,10 @@ class Ldap extends Zend\Ldap\Ldap
 			Stdlib\ErrorHandler::stop();
 
 			if ($search === false) {
-				throw new Exception\LdapException($this, 'searching: ' . $filter);
+				throw new Lp\Exception\LdapException($this, 'searching: ' . $filter);
 			}
 
-			$entries = $this->createCollection(new Ldap\Collection\DefaultIterator($this, $search), null);
+			$entries = $this->createCollection(new Lp\Collection\DefaultIterator($this, $search), null);
 			foreach ( $entries as $es ) {
 				$result[] = $es;
 			}
