@@ -51,8 +51,10 @@ class Registry implements ArrayAccess
 	public function __destruct()
 	{
 		//	Items are "unset" in the reverse order in which they were set.
-		while ( count($this->_registry) ) {
+		$c = count($this->_registry);
+		while ( $c ) {
 			array_pop($this->_registry);
+			--$c;
 		}
 	}
 
