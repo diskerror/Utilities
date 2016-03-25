@@ -2,10 +2,6 @@
 
 namespace Diskerror\Utilities;
 
-use ArrayAccess;
-use Countable;
-use DomainException;
-
 /**
  * Provides an array with LIFO (last in first out) behavior.
  *
@@ -17,7 +13,7 @@ use DomainException;
  * @copyright  Copyright (c) 2008 Reid Woodbury Jr.
  * @license	   http://www.apache.org/licenses/LICENSE-2.0.html	Apache License, Version 2.0
  */
-class Stack implements ArrayAccess, Countable
+class Stack implements \ArrayAccess, \Countable
 {
 	/**#@+
 	* @access protected
@@ -27,7 +23,7 @@ class Stack implements ArrayAccess, Countable
 	 * Array of items to store.
 	 * @type array
 	 */
-	private $_stack;
+	protected $_stack;
 
 	/**
 	 * Public constructor.
@@ -40,26 +36,28 @@ class Stack implements ArrayAccess, Countable
 
 	/**
 	 * Public destructor.
+	 * Items are "unset" in the reverse order in which they were set.
 	 */
 	public final function __destruct()
 	{
-		//	Items are "unset" in the reverse order in which they were set.
-		$c = count($this->_stack);
-		while ( $c ) {
+		for ( $c = count($this->_stack); $c; --$c ) {
 			array_pop($this->_stack);
-			--$c;
 		}
 	}
 
 	/**
 	 * Retrieve value from the named location. If not set then return null.
 	 *
-	 * @param string|int $key
+	 * @param string $key
 	 * @return mixed
 	 */
 	public final function __get($key)
 	{
-		return $this->_stack[$key];
+		if ( array_key_exists($key, $this->_stack) ) {
+			return $this->_stack[$key];
+		}
+
+		return null;
 	}
 
 	/**
@@ -76,10 +74,8 @@ class Stack implements ArrayAccess, Countable
 
 	/**
 	 * Sets a value to the named location.
-	 * Calls with keys that are not non-zero-length strings are pushed onto The Stack
-	 *	  without a named reference.
 	 *
-	 * @param string|int $key
+	 * @param string $key
 	 * @param mixed $value
 	 * @throws DomainException
 	 */
@@ -88,7 +84,7 @@ class Stack implements ArrayAccess, Countable
 		$key = (string) $key;
 
 		if ( array_key_exists($key, $this->_stack) ) {
-			throw new DomainException('Key already exists.');
+			throw new \DomainException('Key already exists.');
 		}
 
 		$this->_stack[$key] = $value;
@@ -97,7 +93,7 @@ class Stack implements ArrayAccess, Countable
 	/**
 	 * Sets a value to the new named location.
 	 *
-	 * @param string|int $key
+	 * @param string $key
 	 * @param mixed $value
 	 * @throws DomainException
 	 */
@@ -106,7 +102,7 @@ class Stack implements ArrayAccess, Countable
 		$key = (string) $key;
 
 		if ( array_key_exists($key, $this->_stack) ) {
-			throw new DomainException('Key already exists.');
+			throw new \DomainException('Key already exists.');
 		}
 
 		$this->_stack[$key] = $value;
@@ -115,7 +111,7 @@ class Stack implements ArrayAccess, Countable
 	/**
 	 * Checks if the the named location exists.
 	 *
-	 * @param string|int $key
+	 * @param string $key
 	 * @return bool
 	 */
 	public final function __isset($key)
@@ -126,7 +122,7 @@ class Stack implements ArrayAccess, Countable
 	/**
 	 * Checks if the the named location exists.
 	 *
-	 * @param string|int $key
+	 * @param string $key
 	 * @return bool
 	 */
 	public final function offsetExists($key)
@@ -135,21 +131,21 @@ class Stack implements ArrayAccess, Countable
 	}
 
 	/**
-	 * @param string|int $key
+	 * @param string $key
 	 * @throws DomainException
 	 */
 	public final function __unset($key)
 	{
-		throw new DomainException('Cannot unset a member.');
+		throw new \DomainException('Cannot unset a member.');
 	}
 
 	/**
-	 * @param string|int $key
+	 * @param string $key
 	 * @throws DomainException
 	 */
 	public final function offsetUnset($key)
 	{
-		throw new DomainException('Cannot unset a member.');
+		throw new \DomainException('Cannot unset a member.');
 	}
 
 	/**

@@ -2,27 +2,22 @@
 
 namespace Diskerror\Utilities;
 
-use ArrayAccess;
-use DomainException;
-
 /**
  * Provides a registry with LIFO (last in first out) behavior.
  *
- * The focus of this class is optional singleton usage, setting
- *	 of members, and the destructor which removes items in the
- *	 reverse order that items were added. Other methods are here
- *	 for completeness.
+ * This adds singleton behavior to \Diskerror\Utilities\Stack to mimic some of
+ *   the behavior of Zend_Registry.
  *
  * Key-values pairs can be accessed with either array or object notation.
  *
  * @copyright  Copyright (c) 2008 Reid Woodbury Jr.
  * @license	   http://www.apache.org/licenses/LICENSE-2.0.html	Apache License, Version 2.0
  */
-class Registry implements ArrayAccess
+class Registry extends Stack
 {
 	/**#@+
-	* @access protected
-	*/
+	 * @access protected
+	 */
 
 	/**
 	 * Singleton instance of this class.
@@ -32,29 +27,12 @@ class Registry implements ArrayAccess
 	private static $_instance;
 
 	/**
-	 * Array of items to store.
-	 * @type array
+	 * Create static instance if it doesn't exist.
 	 */
-	protected $_registry = [];
-
-	/**
-	 * Public constructor.
-	 * Allows for similar behavior as ZF1 Zend/Registry.php.
-	 */
-	public function __construct()
+	private static final function checkInstance()
 	{
-	}
-
-	/**
-	 * Public destructor.
-	 */
-	public function __destruct()
-	{
-		//	Items are "unset" in the reverse order in which they were set.
-		$c = count($this->_registry);
-		while ( $c ) {
-			array_pop($this->_registry);
-			--$c;
+		if ( !isset(self::$_instance) ) {
+			self::$_instance = new self;
 		}
 	}
 
@@ -63,9 +41,22 @@ class Registry implements ArrayAccess
 	 *
 	 * @return Diskerror\Utilities\Registry
 	 */
-	public static function getInstance()
+	public final static function getInstance()
 	{
-		return ( isset(self::$_instance) ? self::$_instance : (self::$_instance = new self()) );
+		self::checkInstance();
+		return self::$_instance;
+	}
+
+	/**
+	 * Unset the default stack instance.
+	 * Primarily used in tearDown() in unit tests.
+	 * @returns void
+	 */
+	public final static function unsetInstance()
+	{
+		if ( isset(self::$_instance) ) {
+			unset(self::$_instance);
+		}
 	}
 
 	/**
@@ -74,9 +65,10 @@ class Registry implements ArrayAccess
 	 * @param string|int $key
 	 * @return mixed
 	 */
-	public static function get($key)
+	public final static function get($key)
 	{
-		return self::getInstance()->offsetGet($key);
+		self::checkInstance();
+		return self::$_instance->offsetGet($key);
 	}
 
 	/**
@@ -85,122 +77,10 @@ class Registry implements ArrayAccess
 	 * @param string|int $key
 	 * @param mixed $value.
 	 */
-	public static function set($key, $value)
+	public final static function set($key, $value)
 	{
-		self::getInstance()->offsetSet($key, $value);
+		self::checkInstance();
+		self::$_instance->offsetSet($key, $value);
 	}
 
-	/**
-	 * Retrieve value from the named location. If not set then return null.
-	 *
-	 * @param string|int $key
-	 * @return mixed
-	 */
-	public function __get($key)
-	{
-		return $this->_registry[$key];
-	}
-
-	/**
-	 * Retrieve value from the named location.
-	 *
-	 * @param string|int $key
-	 * @return mixed
-	 */
-	public function offsetGet($key)
-	{
-		return $this->_registry[$key];
-	}
-
-	/**
-	 * Sets a value to the named location.
-	 * Calls with keys that are not non-zero-length strings are pushed onto The Stack
-	 *	  without a named reference.
-	 *
-	 * @param string|int $key
-	 * @param mixed $value
-	 * @throws DomainException
-	 */
-	public function __set($key, $value)
-	{
-		$key = (string) $key;
-
-		if ( array_key_exists($key, $this->_registry) ) {
-			throw new DomainException('Key already exists.');
-		}
-
-		$this->_registry[$key] = $value;
-	}
-
-	/**
-	 * Sets a value to the new named location.
-	 *
-	 * @param string|int $key
-	 * @param mixed $value
-	 * @throws DomainException
-	 */
-	public function offsetSet($key, $value)
-	{
-		$key = (string) $key;
-
-		if ( array_key_exists($key, $this->_registry) ) {
-			throw new DomainException('Key already exists.');
-		}
-
-		$this->_registry[$key] = $value;
-	}
-
-	/**
-	 * Checks if the the named location exists.
-	 *
-	 * @param string|int $key
-	 * @return bool
-	 */
-	public function __isset($key)
-	{
-		return ( array_key_exists($key, $this->_registry) && isset($this->_registry[$key]) );
-	}
-
-	/**
-	 * Checks if the the named location exists.
-	 *
-	 * @param string|int $key
-	 * @return bool
-	 */
-	public function offsetExists($key)
-	{
-		return ( array_key_exists($key, $this->_registry) && isset($this->_registry[$key]) );
-	}
-
-	/**
-	 * @param string|int $key
-	 * @throws DomainException
-	 */
-	public function __unset($key)
-	{
-		throw new DomainException('Cannot unset a member.');
-	}
-
-	/**
-	 * @param string|int $key
-	 * @throws DomainException
-	 */
-	public function offsetUnset($key)
-	{
-		throw new DomainException('Cannot unset a member.');
-	}
-
-	/**
-	 * Remove and return last member value.
-	 *
-	 * @return mixed
-	 */
-	public function pop()
-	{
-		if ( count($this->_registry) ) {
-			return array_pop($this->_registry);
-		}
-
-		return null;
-	}
 }
