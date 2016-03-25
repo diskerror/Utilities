@@ -22,7 +22,7 @@ abstract class Singleton
 	/**
 	 * Making method private prevents any copy being made of the class.
 	 */
-	private function __clone()
+	private final function __clone()
 	{
 	}
 
@@ -42,4 +42,5 @@ abstract class Singleton
 				($registry[$calledClass] = new $calledClass())
 		);
 	}
+
 }
