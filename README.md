@@ -2,7 +2,9 @@
 
 PHP utilities tested with PHP version 5.4.
 
-*Registry* is a singleton implementing *ArrayAccess* and object access with **LIFO**, Last-In-First-Out behavior.
+*Stack* is an implemention of *ArrayAccess* with object access with **LIFO**, Last-In-First-Out behavior.
+
+*Registry* is a singleton extending *Stack* with behavior similar to Zend_Registry.
 
 *DateTime* and *Date* add convenience methods to the built-in PHP *DateTime* class. This includes the __toString method that returns a date-time string formatted for the default MySQL date-time format.
 
