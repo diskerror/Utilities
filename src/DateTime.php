@@ -4,7 +4,6 @@ namespace Diskerror\Utilities;
 
 use DateTime as DT;
 use DateTimeZone;
-use InvalidArgumentException;
 
 /**
  * This class adds convienence methods to the built-in DateTime.
@@ -66,7 +65,7 @@ class DateTime extends DT
 			break;
 
 			default:
-			throw new InvalidArgumentException('first argument is the wrong type: ' . gettype($time));
+			throw new \InvalidArgumentException('first argument is the wrong type: ' . gettype($time));
 		}
 	}
 

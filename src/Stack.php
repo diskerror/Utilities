@@ -26,8 +26,7 @@ class Stack implements \ArrayAccess, \Countable
 	protected $_stack;
 
 	/**
-	 * Public constructor.
-	 * Allows for similar behavior as ZF1 Zend/Registry.php.
+	 * Constructor.
 	 */
 	public final function __construct()
 	{
@@ -35,7 +34,7 @@ class Stack implements \ArrayAccess, \Countable
 	}
 
 	/**
-	 * Public destructor.
+	 * Destructor.
 	 * Items are "unset" in the reverse order in which they were set.
 	 */
 	public final function __destruct()
@@ -46,7 +45,8 @@ class Stack implements \ArrayAccess, \Countable
 	}
 
 	/**
-	 * Retrieve value from the named location. If not set then return null.
+	 * Retrieve value from the named location with class notation.
+	 * If not set then return null.
 	 *
 	 * @param string $key
 	 * @return mixed
@@ -61,7 +61,7 @@ class Stack implements \ArrayAccess, \Countable
 	}
 
 	/**
-	 * Retrieve value from the named location.
+	 * Retrieve value from the named location with array notation.
 	 * Accessing a key that does not exist will cause an error.
 	 *
 	 * @param string $key
@@ -73,7 +73,7 @@ class Stack implements \ArrayAccess, \Countable
 	}
 
 	/**
-	 * Sets a value to the named location.
+	 * Sets a value to the named location with class notation.
 	 *
 	 * @param string $key
 	 * @param mixed $value
@@ -91,7 +91,7 @@ class Stack implements \ArrayAccess, \Countable
 	}
 
 	/**
-	 * Sets a value to the new named location.
+	 * Sets a value to the new named location with array notation.
 	 *
 	 * @param string $key
 	 * @param mixed $value

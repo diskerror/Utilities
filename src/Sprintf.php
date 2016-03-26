@@ -52,8 +52,8 @@ class Sprintf
 	 * Reference numbers (the "4$" inside "%4$s") here and in sprintf are 1-based.
 	 * Note that this is changed and stored interally as a 0-based indexed array.
 	 *
-	 * **These should NOT be use as they cannot be handled well without replacing
-	 * the printf variant used for formatting.**
+	 * **These should NOT be used as they cannot be handled well without replacing
+	 *   the PHP builtin printf variant used for formatting.**
 	 *
 	 * @param string $formatStr
 	 * @param bool $removeLeadSpace -OPTIONAL
