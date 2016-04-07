@@ -101,4 +101,23 @@ class StackTest extends PHPUnit_Framework_TestCase
 		$this->assertNull($stack->pop());
 	}
 
+// 	public function testGetSet()
+// 	{
+// 		for ( $i = 11; $i < 17; ++$i ) {
+// 			Diskerror\Utilities\Stack::set('_'.$i, $i * M_PI);
+// 		}
+//
+// 		$this->assertEquals( Diskerror\Utilities\Stack::get('_13'), 13*M_PI );
+//
+// 		$this->assertEquals(6, count(Diskerror\Utilities\Stack::getInstance()));
+//
+// 		$r = Diskerror\Utilities\Stack::getInstance();
+// 		$this->assertEquals( 14*M_PI, $r->_14 );
+//
+// 		$this->assertEquals(6, count($r));
+//
+// 		Diskerror\Utilities\Stack::unsetInstance();
+// 		$this->assertEquals(0, count(Diskerror\Utilities\Stack::getInstance()));
+// 	}
+
 }
