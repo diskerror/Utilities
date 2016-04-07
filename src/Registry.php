@@ -55,7 +55,7 @@ class Registry extends Stack
 	public final static function unsetInstance()
 	{
 		if ( isset(self::$_instance) ) {
-			unset(self::$_instance);
+			self::$_instance = null;	//	can't unset a static property
 		}
 	}
 
