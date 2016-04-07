@@ -29,7 +29,7 @@ class Registry extends Stack
 	/**
 	 * Create static instance if it doesn't exist.
 	 */
-	private static final function checkInstance()
+	private static final function _checkInstance()
 	{
 		if ( !isset(self::$_instance) ) {
 			self::$_instance = new self;
@@ -43,7 +43,7 @@ class Registry extends Stack
 	 */
 	public final static function getInstance()
 	{
-		self::checkInstance();
+		self::_checkInstance();
 		return self::$_instance;
 	}
 
@@ -55,7 +55,7 @@ class Registry extends Stack
 	public final static function unsetInstance()
 	{
 		if ( isset(self::$_instance) ) {
-			self::$_instance = null;
+			unset(self::$_instance);
 		}
 	}
 
@@ -67,7 +67,7 @@ class Registry extends Stack
 	 */
 	public final static function get($key)
 	{
-		self::checkInstance();
+		self::_checkInstance();
 		return self::$_instance->offsetGet($key);
 	}
 
@@ -79,7 +79,7 @@ class Registry extends Stack
 	 */
 	public final static function set($key, $value)
 	{
-		self::checkInstance();
+		self::_checkInstance();
 		self::$_instance->offsetSet($key, $value);
 	}
 
