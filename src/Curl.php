@@ -34,7 +34,7 @@ class Curl
 {
 	protected $_curl = null;
 
-	public function __construct($url = '', array $opt = [])
+	public function __construct($url = NULL, array $opt = [])
 	{
 		$this->init($url);
 		if ( count($opt) ) {
@@ -47,29 +47,29 @@ class Curl
 		$this->close();
 	}
 
-	public function init($url = '')
+	public function init($url = NULL)
 	{
 		$this->close();
 		$this->_curl = curl_init($url);
-		$this->error_check(__METHOD__);
+		$this->error_check(__FILE__, __LINE__);
 	}
 
 	public function setopt($opt, $val = true)
 	{
 		curl_setopt($this->_curl, $opt, $val);
-		$this->error_check(__METHOD__);
+		$this->error_check(__FILE__, __LINE__);
 	}
 
 	public function seturl($url = '')
 	{
 		curl_setopt($this->_curl, CURLOPT_URL, $url);
-		$this->error_check(__METHOD__);
+		$this->error_check(__FILE__, __LINE__);
 	}
 
 	public function setopt_array(array $opta)
 	{
 		curl_setopt_array($this->_curl, $opta);
-		$this->error_check(__METHOD__);
+		$this->error_check(__FILE__, __LINE__);
 	}
 
 	public function exec($url = '')
@@ -78,15 +78,15 @@ class Curl
 			$this->seturl($url);
 		}
 		$r = curl_exec($this->_curl);
-		$this->error_check(__METHOD__);
+		$this->error_check(__FILE__, __LINE__);
 
 		return $r;
 	}
 
-	private function error_check($md = 'no method given')
+	protected function error_check($file, $line)
 	{
-		if ( isset($this->_curl) && $err_num = curl_errno($this->_curl)) {
-			throw new ErrorException($md . ': ' . curl_error($this->_curl), $err_num);
+		if ( isset($this->_curl) && $err_num = $this->_curl->errno()) {
+			throw new CurlException( $this->_curl->error(), $err_num, $file, $line );
 		}
 	}
 
@@ -108,3 +108,8 @@ class Curl
 		}
 	}
 }
+
+class CurlException extends \Exception
+{
+}
+
