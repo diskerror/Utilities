@@ -107,6 +107,12 @@ class Curl
 			unset($this->_curl);
 		}
 	}
+
+	public static function version($age = CURLVERSION_NOW)
+	{
+		return curl_version($age);
+	}
+
 }
 
 class CurlException extends \Exception
