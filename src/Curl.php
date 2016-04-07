@@ -85,8 +85,8 @@ class Curl
 
 	protected function error_check($file, $line)
 	{
-		if ( isset($this->_curl) && $err_num = $this->_curl->errno()) {
-			throw new CurlException( $this->_curl->error(), $err_num, $file, $line );
+		if ( isset($this->_curl) && $err_num = $this->errno()) {
+			throw new CurlException( $this->error(), $err_num, $file, $line );
 		}
 	}
 
