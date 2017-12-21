@@ -51,25 +51,25 @@ class Curl
 	{
 		$this->close();
 		$this->_curl = curl_init($url);
-		$this->error_check(__FILE__, __LINE__);
+		$this->error_check();
 	}
 
 	public function setopt($opt, $val = true)
 	{
 		curl_setopt($this->_curl, $opt, $val);
-		$this->error_check(__FILE__, __LINE__);
+		$this->error_check();
 	}
 
 	public function seturl($url = '')
 	{
 		curl_setopt($this->_curl, CURLOPT_URL, $url);
-		$this->error_check(__FILE__, __LINE__);
+		$this->error_check();
 	}
 
 	public function setopt_array(array $opta)
 	{
 		curl_setopt_array($this->_curl, $opta);
-		$this->error_check(__FILE__, __LINE__);
+		$this->error_check();
 	}
 
 	public function exec($url = '')
@@ -78,15 +78,15 @@ class Curl
 			$this->seturl($url);
 		}
 		$r = curl_exec($this->_curl);
-		$this->error_check(__FILE__, __LINE__);
+		$this->error_check();
 
 		return $r;
 	}
 
-	protected function error_check($file, $line)
+	protected function error_check()
 	{
 		if ( isset($this->_curl) && $err_num = $this->errno()) {
-			throw new CurlException( $this->error(), $err_num, $file, $line );
+			throw new CurlException( $this->error(), $err_num );
 		}
 	}
 

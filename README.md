@@ -14,7 +14,7 @@ PHP utilities tested with PHP version 5.4–5.6.
 
 *Curl* wraps the PHP curl functions.
 
-##Composer
+## Composer
 ```
 > composer require diskerror/utilities
 ```
