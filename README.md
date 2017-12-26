@@ -6,7 +6,7 @@ PHP utilities tested with PHP version 5.4–5.6.
 
 *Registry* is a singleton extending *Stack* with behavior similar to Zend_Registry.
 
-*DateTime* and *Date* add convenience methods to the built-in PHP *DateTime* class. This includes the __toString method that returns a date-time string formatted for the default MySQL date-time format.
+*DateTime* and *Date* add convenience methods to the built-in PHP *DateTime* class. This includes the __toString method that returns a date-time string formatted for the default MySQL date-time format, and also adds handling of DateTime for MongoDB.
 
 *Sprintf* adds format specifiers useful for creating MySQL statements.
 
