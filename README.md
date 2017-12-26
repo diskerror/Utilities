@@ -1,6 +1,6 @@
 # PHP Utilities
 
-PHP utilities tested with PHP version 5.4–5.6.
+PHP utilities tested with PHP version 5.4–5.6, 7.1.
 
 *Stack* is an implemention of *ArrayAccess* with object access with **LIFO**, Last-In-First-Out behavior.
 
