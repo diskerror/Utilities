@@ -167,8 +167,9 @@ class DateTime extends DT
 	 * @param object|array|int $hou
 	 * @param int $min
 	 * @param int $sec
+	 * @param int $ms
 	 */
-	public function setTime($hou, $min = 0, $sec = 0)
+	public function setTime($hou, $min = 0, $sec = 0, $ms = 0)
 	{
 		switch ( gettype($hou) ) {
 			case 'object':
@@ -196,11 +197,15 @@ class DateTime extends DT
 					case 'sec':
 					$sec = $v;
 					break;
+
+					case 'ms':
+					$ms = $v;
+					break;
 				}
 			}
 		}
 
-		parent::setTime((int) $hou, (int) $min, (int) $sec);
+		parent::setTime((int) $hou, (int) $min, (int) $sec, (int) $ms);
 
 		return $this;
 	}

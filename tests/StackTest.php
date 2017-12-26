@@ -1,5 +1,5 @@
 <?php
-class StackTest extends PHPUnit_Framework_TestCase
+class StackTest extends PHPUnit\Framework\TestCase
 {
 	public function testArray()
 	{
@@ -30,19 +30,18 @@ class StackTest extends PHPUnit_Framework_TestCase
 		unset($stack[4]);
 	}
 
-	/**
-	 * @depends				testArray
-	 * @expectedException	PHPUnit_Framework_Error
-	 */
-	public function testArrayExistance()
-	{
-		$stack = new Diskerror\Utilities\Stack;
-		for ( $i = 5; $i < 8; ++$i ) {
-			$stack[$i] = $i * M_PI;
-		}
-
-		$e = $stack["9"];
-	}
+// 	/**
+// 	 * @depends				testArray
+// 	 */
+// 	public function testArrayExistance()
+// 	{
+// 		$stack = new Diskerror\Utilities\Stack;
+// 		for ( $i = 5; $i < 8; ++$i ) {
+// 			$stack[$i] = $i * M_PI;
+// 		}
+//
+// 		$e = $stack["9"];	//	silently returns null
+// 	}
 
 	public function testClass()
 	{

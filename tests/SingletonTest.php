@@ -1,5 +1,5 @@
 <?php
-class SingletonTest extends PHPUnit_Framework_TestCase
+class SingletonTest extends PHPUnit\Framework\TestCase
 {
 	public function testConstruct()
 	{
