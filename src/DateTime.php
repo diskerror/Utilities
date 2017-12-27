@@ -19,26 +19,29 @@ class DateTime extends DT
 	 * Default MySQL datetime format.
 	 */
 	const STRING_IO_FORMAT = 'Y-m-d H:i:s';
+	const STRING_IO_FORMAT_MICRO = 'Y-m-d H:i:s.u';
 
 	/**
-	 * Accepts a DateTime object or;
+	 * Accepts any DateTime object or;
 	 * Adds the ability to pass in an array or object with key names of variable
 	 *	   length but a minimum of 3 characters, upper or lower case.
 	 * See setTime and setDate for more information.
 	 *
 	 * @param object|array|string	$time -OPTIONAL
-	 * @param DateTimeZone			$timezone -OPTIONAL
+	 * @param DateTimeZone|string	$timezone -OPTIONAL
 	 */
 	public function __construct($time = 'now', $timezone = null)
 	{
-		if ( !is_a($timezone, 'DateTimeZone') ) {
-			$timezone = new DateTimeZone(date_default_timezone_get());
+		if ( is_string($timezone) ) {
+			$timezone = new DateTimeZone($timezone);
 		}
 
 		switch ( gettype($time) ) {
 			case 'object':
-			if ( is_a($time, 'DateTime') ) {
-				parent::__construct($time->format(self::STRING_IO_FORMAT), $time->getTimezone());
+			if ( is_a($time, DT) ) {
+				foreach ( $time as $k=>$v ) {
+					$this->$k = $v;
+				}
 				break;
 			}
 			$time = (array) $time;
@@ -54,7 +57,7 @@ class DateTime extends DT
 			}
 			//	remove AD extra data
 			if ( substr($time, -3) === '.0Z' ) {
-				$time = substr($time, 0, 14);
+				$time = substr($time, 0, -3);
 			}
 			parent::__construct($time, $timezone);
 			break;
@@ -71,41 +74,38 @@ class DateTime extends DT
 
 	/**
 	 * Create DateTime object defaults to something that will accept
-	 * the default MySQL datetime format of "Y-m-d H:i:s".
+	 * the default MySQL datetime format of "Y-m-d H:i:s.u".
 	 *
-	 * @param string		$formatOrTime
-	 * @param string		$time -OPTIONAL
-	 * @param DateTimeZone	$timezone -OPTIONAL
+	 * @param string				$formatOrTime
+	 * @param string				$time -OPTIONAL
+	 * @param DateTimeZone|string	$timezone -OPTIONAL
 	 * @return DateTime
 	 */
 	public static function createFromFormat($formatOrTime, $time = '', $timezone = null)
 	{
-		if ( $time === '' ) {
-			$parsed = date_parse($formatOrTime);
-		} else {
-			$parsed = date_parse_from_format($formatOrTime, $time);
+		if ( is_string($timezone) ) {
+			$timezone = new DateTimeZone($timezone);
 		}
 
-		$d = new self();
-
-		if ( $timezone !== null ) {
-			$d->setTimezone( $timezone );
+		if ( $time == '' ) {
+			return new self( $formatOrTime, $timezone );
 		}
 
-		$d->setDate($parsed);
-		$d->setTime($parsed);
-
-		return $d;
+		return new self( DT::createFromFormat($formatOrTime, $time, $timezone) );
 	}
 
 	/**
-	 * Returns MySQL formatted string.
+	 * Returns MySQL default formatted date-time string.
 	 * If a custom formatting is desired use DateTime::format($format).
 	 *
 	 * @return string
 	 */
 	public function __toString()
 	{
+		if ( $this->format('u') > 0 ) {
+			return $this->format(self::STRING_IO_FORMAT_MICRO);
+		}
+
 		return $this->format(self::STRING_IO_FORMAT);
 	}
 
@@ -117,33 +117,33 @@ class DateTime extends DT
 	 * Notice: The function "getdate()" returns an array with both
 	 *	  "month" and "mon" and will cause confusion here.
 	 *
-	 * @param object|array|int $yea
-	 * @param int -DEFAULT 1
-	 * @param int -DEFAULT 1
+	 * @param object|array|int $year
+	 * @param int	$month	-DEFAULT 1
+	 * @param int	$day	-DEFAULT 1
 	 */
-	public function setDate($yea, $mon = 1, $day = 1)
+	public function setDate($year, $month = 1, $day = 1)
 	{
-		switch ( gettype($yea) ) {
+		switch ( gettype($year) ) {
 			case 'object':
-			$yea = (array) $yea;
+			$year = (array) $year;
 
 			case 'array':
 			//	change all keys to lower case
-			$arrIn = array_change_key_case($yea);
+			$arrIn = array_change_key_case($year);
 
 			//	get current values as input can be incomplete
-			$yea = $this->format('Y');
-			$mon = $this->format('n');
+			$year = $this->format('Y');
+			$month = $this->format('n');
 			$day = $this->format('j');
 
 			foreach ($arrIn as $k => $v) {
 				switch ( substr($k, 0, 3) ) {
 					case 'yea':
-					$yea = $v;
+					$year = $v;
 					break;
 
 					case 'mon':
-					$mon = $v;
+					$month = $v;
 					break;
 
 					case 'day':
@@ -154,7 +154,7 @@ class DateTime extends DT
 			break;
 		}
 
-		parent::setDate((int) $yea, (int) $mon, (int) $day);
+		parent::setDate((int) $year, (int) $month, (int) $day);
 
 		return $this;
 	}
@@ -162,50 +162,55 @@ class DateTime extends DT
 	/**
 	 * Adds the ability to pass in an array with key names of variable
 	 *	  length but a minimum of 3 characters, upper or lower case.
-	 * Requires one object, one associative array, or 3 integer parameters.
+	 * Requires one object, one associative array, or 4 integer parameters.
 	 *
-	 * @param object|array|int $hou
-	 * @param int $min
-	 * @param int $sec
-	 * @param int $ms
+	 * @param object|array|int $hour
+	 * @param int $minute
+	 * @param int $second
+	 * @param int $mcs				Microseconds.
 	 */
-	public function setTime($hou, $min = 0, $sec = 0, $ms = 0)
+	public function setTime($hour, $minute = 0, $second = 0, $mcs = 0)
 	{
-		switch ( gettype($hou) ) {
+		switch ( gettype($hour) ) {
 			case 'object':
-			$hou = (array) $hou;
+			$hour = (array) $hour;
 
 			case 'array':
 			//	change all keys to lower case
-			$arrIn = array_change_key_case($hou);
+			$arrIn = array_change_key_case($hour);
 
 			//	get current values as input can be incomplete
-			$hou = $this->format('G');
-			$min = $this->format('i');
-			$sec = $this->format('s');
+			$hour = $this->format('G');
+			$minute = $this->format('i');
+			$second = $this->format('s');
+			$mcs = $this->format('u');
 
 			foreach ($arrIn as $k => $v) {
 				switch ( substr($k, 0, 3) ) {
 					case 'hou':
-					$hou = $v;
+					$hour = $v;
 					break;
 
 					case 'min':
-					$min = $v;
+					$minute = $v;
 					break;
 
 					case 'sec':
-					$sec = $v;
+					$second = $v;
 					break;
 
-					case 'ms':
-					$ms = $v;
+					case 'mcs':
+					$mcs = $v;
+					break;
+
+					case 'fra':	//	"fraction" which is a float
+					$mcs = $v * 1000000;
 					break;
 				}
 			}
 		}
 
-		parent::setTime((int) $hou, (int) $min, (int) $sec, (int) $ms);
+		parent::setTime((int) $hour, (int) $minute, (int) $second, (int) $mcs);
 
 		return $this;
 	}

@@ -30,18 +30,18 @@ class StackTest extends PHPUnit\Framework\TestCase
 		unset($stack[4]);
 	}
 
-// 	/**
-// 	 * @depends				testArray
-// 	 */
-// 	public function testArrayExistance()
-// 	{
-// 		$stack = new Diskerror\Utilities\Stack;
-// 		for ( $i = 5; $i < 8; ++$i ) {
-// 			$stack[$i] = $i * M_PI;
-// 		}
-//
-// 		$e = $stack["9"];	//	silently returns null
-// 	}
+	/**
+	 * @depends				testArray
+	 */
+	public function testArrayExistance()
+	{
+		$stack = new Diskerror\Utilities\Stack;
+		for ( $i = 5; $i < 8; ++$i ) {
+			$stack[$i] = $i * M_PI;
+		}
+
+		$this->assertNull( $stack["9"] );
+	}
 
 	public function testClass()
 	{
