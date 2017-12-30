@@ -2,8 +2,6 @@
 
 namespace Diskerror\Utilities;
 
-use ErrorException;
-
 /**
  * Copyright (c) 2008 Reid Woodbury.
  *
@@ -34,7 +32,7 @@ class Curl
 {
 	protected $_curl = null;
 
-	public function __construct($url = NULL, array $opt = [])
+	public function __construct($url = null, array $opt = [])
 	{
 		$this->init($url);
 		if ( count($opt) ) {
@@ -47,7 +45,7 @@ class Curl
 		$this->close();
 	}
 
-	public function init($url = NULL)
+	public function init($url = null)
 	{
 		$this->close();
 		$this->_curl = curl_init($url);
@@ -112,10 +110,8 @@ class Curl
 	{
 		return curl_version($age);
 	}
-
 }
 
 class CurlException extends \Exception
 {
 }
-

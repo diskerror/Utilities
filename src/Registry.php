@@ -6,11 +6,11 @@ namespace Diskerror\Utilities;
  * Provides a registry with LIFO (last in first out) behavior.
  *
  * This adds singleton behavior to \Diskerror\Utilities\Stack to mimic some of
- *   the behavior of Zend_Registry.
+ *	 the behavior of Zend_Registry.
  *
  * Key-values pairs can be accessed with either array or object notation.
  *
- * @copyright  Copyright (c) 2008 Reid Woodbury Jr.
+ * @copyright  Copyright (c) 2008 Reid Woodbury Jr
  * @license	   http://www.apache.org/licenses/LICENSE-2.0.html	Apache License, Version 2.0
  */
 class Registry extends Stack
@@ -21,7 +21,7 @@ class Registry extends Stack
 
 	/**
 	 * Singleton instance of this class.
-	 * @type Diskerror\Utilities\Registry
+	 * @var Diskerror\Utilities\Registry
 	 * @static
 	 */
 	private static $_instance;
@@ -29,10 +29,10 @@ class Registry extends Stack
 	/**
 	 * Create static instance if it doesn't exist.
 	 */
-	private static final function _checkInstance()
+	final private static function _checkInstance()
 	{
 		if ( !isset(self::$_instance) ) {
-			self::$_instance = new self;
+			self::$_instance = new self();
 		}
 	}
 
@@ -41,9 +41,10 @@ class Registry extends Stack
 	 *
 	 * @return Diskerror\Utilities\Registry
 	 */
-	public final static function getInstance()
+	final public static function getInstance()
 	{
 		self::_checkInstance();
+
 		return self::$_instance;
 	}
 
@@ -52,7 +53,7 @@ class Registry extends Stack
 	 * Primarily used in tearDown() in unit tests.
 	 * @returns void
 	 */
-	public final static function unsetInstance()
+	final public static function unsetInstance()
 	{
 		if ( isset(self::$_instance) ) {
 			self::$_instance = null;	//	can't unset a static property
@@ -65,9 +66,10 @@ class Registry extends Stack
 	 * @param string|int $key
 	 * @return mixed
 	 */
-	public final static function get($key)
+	final public static function get($key)
 	{
 		self::_checkInstance();
+
 		return self::$_instance->offsetGet($key);
 	}
 
@@ -75,12 +77,11 @@ class Registry extends Stack
 	 * Sets data to singleton instance.
 	 *
 	 * @param string|int $key
-	 * @param mixed $value.
+	 * @param mixed $value
 	 */
-	public final static function set($key, $value)
+	final public static function set($key, $value)
 	{
 		self::_checkInstance();
 		self::$_instance->offsetSet($key, $value);
 	}
-
 }

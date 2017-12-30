@@ -10,12 +10,12 @@ use DateTimeZone;
  *
  * Date and time can be passed in with objects or associative arrays.
  *
- * @copyright  Copyright (c) 2011 Reid Woodbury Jr.
+ * @copyright  Copyright (c) 2011 Reid Woodbury Jr
  * @license	   http://www.apache.org/licenses/LICENSE-2.0.html	Apache License, Version 2.0
  */
 class DateTime extends DT
 {
-    /**
+	/**
 	 * Default MySQL datetime format.
 	 */
 	const STRING_IO_FORMAT = 'Y-m-d H:i:s';
@@ -38,8 +38,8 @@ class DateTime extends DT
 
 		switch ( gettype($time) ) {
 			case 'object':
-			if ( is_a($time, DT) ) {
-				foreach ( $time as $k=>$v ) {
+			if ( $time instanceof DateTimeInterface ) {
+				foreach ( $time as $k => $v ) {
 					$this->$k = $v;
 				}
 				break;
@@ -167,7 +167,7 @@ class DateTime extends DT
 	 * @param object|array|int $hour
 	 * @param int $minute
 	 * @param int $second
-	 * @param int $mcs				Microseconds.
+	 * @param int $mcs				Microseconds
 	 */
 	public function setTime($hour, $minute = 0, $second = 0, $mcs = 0)
 	{
@@ -203,7 +203,7 @@ class DateTime extends DT
 					$mcs = $v;
 					break;
 
-					case 'fra':	//	"fraction" which is a float
+					case 'fra': //	"fraction" which is a float
 					$mcs = $v * 1000000;
 					break;
 				}

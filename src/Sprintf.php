@@ -5,7 +5,7 @@ namespace Diskerror\Utilities;
 /**
  * Extends sprintf with options suitable for generating MySQL query strings.
  *
- * @copyright  Copyright (c) 2011 Reid Woodbury Jr.
+ * @copyright  Copyright (c) 2011 Reid Woodbury Jr
  * @license	   http://www.apache.org/licenses/LICENSE-2.0.html	Apache License, Version 2.0
  */
 class Sprintf
@@ -17,21 +17,21 @@ class Sprintf
 	/**
 	 * Prepped sprintf format string.
 	 *
-	 * @type string
+	 * @var string
 	 */
 	protected $_formatStr;
 
 	/**
 	 * Array of specifications to escape.
 	 *
-	 * @type array
+	 * @var array
 	 */
 	protected $_specsToEsc;
 
 	/**
 	 * Array of specifications to change to hexidecimal code.
 	 *
-	 * @type array
+	 * @var array
 	 */
 	protected $_specsToHex;
 
@@ -53,7 +53,7 @@ class Sprintf
 	 * Note that this is changed and stored interally as a 0-based indexed array.
 	 *
 	 * **These should NOT be used as they cannot be handled well without replacing
-	 *   the PHP builtin printf variant used for formatting.**
+	 *	 the PHP builtin printf variant used for formatting.**
 	 *
 	 * @param string $formatStr
 	 * @param bool $removeLeadSpace -OPTIONAL
@@ -64,11 +64,11 @@ class Sprintf
 		//	Convert new spec types to proper format string with proper added charactera.
 		$this->_formatStr = preg_replace(
 			array(
-				self::SPEC_FIND.'[aA]/u',
-				self::SPEC_FIND.'H/u',
-				self::SPEC_FIND.'[qQ]/u',
-				self::SPEC_FIND.'S/u',
-				self::SPEC_FIND.'[tT]/u'
+				self::SPEC_FIND . '[aA]/u',
+				self::SPEC_FIND . 'H/u',
+				self::SPEC_FIND . '[qQ]/u',
+				self::SPEC_FIND . 'S/u',
+				self::SPEC_FIND . '[tT]/u'
 			),
 			array(
 				'\'$1s\'',
@@ -169,6 +169,6 @@ class Sprintf
 	 */
 	public function __invoke($aIn)
 	{
-		return ( is_array($aIn) ? $this->bind($aIn) : $this->bind(func_get_args()) );
+		return	is_array($aIn) ? $this->bind($aIn) : $this->bind(func_get_args());
 	}
 }

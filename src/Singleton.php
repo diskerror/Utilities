@@ -6,7 +6,7 @@ namespace Diskerror\Utilities;
  * Abstract class for getting the instance of a called class.
  * Uses Registry for external storage enabling a heritable class.
  *
- * @copyright  Copyright (c) 2011 Reid Woodbury Jr.
+ * @copyright  Copyright (c) 2011 Reid Woodbury Jr
  * @license	   http://www.apache.org/licenses/LICENSE-2.0.html	Apache License, Version 2.0
  */
 abstract class Singleton
@@ -22,7 +22,7 @@ abstract class Singleton
 	/**
 	 * Making method private prevents any copy being made of the class.
 	 */
-	private final function __clone()
+	final private function __clone()
 	{
 	}
 
@@ -36,11 +36,8 @@ abstract class Singleton
 		$calledClass = get_called_class();
 		$registry = Registry::getInstance();
 
-		return (
-			isset($registry[$calledClass]) ?
-				$registry[$calledClass] :
-				($registry[$calledClass] = new $calledClass())
-		);
+		return isset($registry[$calledClass]) ?
+			$registry[$calledClass] :
+			($registry[$calledClass] = new $calledClass());
 	}
-
 }

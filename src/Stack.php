@@ -6,11 +6,11 @@ namespace Diskerror\Utilities;
  * Provides an array with LIFO (last in first out) behavior.
  *
  * The focus of this class is the destructor which removes items in the reverse
- *   order that items were added. Other methods are here for completeness.
+ *	 order that items were added. Other methods are here for completeness.
  *
  * Key-values pairs can be accessed with either array or object notation.
  *
- * @copyright  Copyright (c) 2008 Reid Woodbury Jr.
+ * @copyright  Copyright (c) 2008 Reid Woodbury Jr
  * @license	   http://www.apache.org/licenses/LICENSE-2.0.html	Apache License, Version 2.0
  */
 class Stack implements \ArrayAccess, \Countable
@@ -21,14 +21,14 @@ class Stack implements \ArrayAccess, \Countable
 
 	/**
 	 * Array of items to store.
-	 * @type array
+	 * @var array
 	 */
 	protected $_stack;
 
 	/**
 	 * Constructor.
 	 */
-	public final function __construct()
+	final public function __construct()
 	{
 		$this->_stack = [];
 	}
@@ -37,7 +37,7 @@ class Stack implements \ArrayAccess, \Countable
 	 * Destructor.
 	 * Items are "unset" in the reverse order in which they were set.
 	 */
-	public final function __destruct()
+	final public function __destruct()
 	{
 		for ( $c = count($this->_stack); $c; --$c ) {
 			array_pop($this->_stack);
@@ -51,7 +51,7 @@ class Stack implements \ArrayAccess, \Countable
 	 * @param string $key
 	 * @return mixed
 	 */
-	public final function __get($key)
+	final public function __get($key)
 	{
 		if ( array_key_exists($key, $this->_stack) ) {
 			return $this->_stack[$key];
@@ -67,7 +67,7 @@ class Stack implements \ArrayAccess, \Countable
 	 * @param string $key
 	 * @return mixed
 	 */
-	public final function offsetGet($key)
+	final public function offsetGet($key)
 	{
 		return $this->_stack[$key];
 	}
@@ -79,7 +79,7 @@ class Stack implements \ArrayAccess, \Countable
 	 * @param mixed $value
 	 * @throws DomainException
 	 */
-	public final function __set($key, $value)
+	final public function __set($key, $value)
 	{
 		$key = (string) $key;
 
@@ -97,7 +97,7 @@ class Stack implements \ArrayAccess, \Countable
 	 * @param mixed $value
 	 * @throws DomainException
 	 */
-	public final function offsetSet($key, $value)
+	final public function offsetSet($key, $value)
 	{
 		$key = (string) $key;
 
@@ -114,9 +114,9 @@ class Stack implements \ArrayAccess, \Countable
 	 * @param string $key
 	 * @return bool
 	 */
-	public final function __isset($key)
+	final public function __isset($key)
 	{
-		return ( array_key_exists($key, $this->_stack) && isset($this->_stack[$key]) );
+		return	array_key_exists($key, $this->_stack) && isset($this->_stack[$key]);
 	}
 
 	/**
@@ -125,16 +125,16 @@ class Stack implements \ArrayAccess, \Countable
 	 * @param string $key
 	 * @return bool
 	 */
-	public final function offsetExists($key)
+	final public function offsetExists($key)
 	{
-		return ( array_key_exists($key, $this->_stack) && isset($this->_stack[$key]) );
+		return	array_key_exists($key, $this->_stack) && isset($this->_stack[$key]);
 	}
 
 	/**
 	 * @param string $key
 	 * @throws DomainException
 	 */
-	public final function __unset($key)
+	final public function __unset($key)
 	{
 		throw new \DomainException('Cannot unset a member.');
 	}
@@ -143,7 +143,7 @@ class Stack implements \ArrayAccess, \Countable
 	 * @param string $key
 	 * @throws DomainException
 	 */
-	public final function offsetUnset($key)
+	final public function offsetUnset($key)
 	{
 		throw new \DomainException('Cannot unset a member.');
 	}
@@ -151,9 +151,9 @@ class Stack implements \ArrayAccess, \Countable
 	/**
 	 * Returns the number of elements in the stack.
 	 *
-	 * @return integer
+	 * @return int
 	 */
-	public final function count()
+	final public function count()
 	{
 		return count($this->_stack);
 	}
@@ -163,7 +163,7 @@ class Stack implements \ArrayAccess, \Countable
 	 *
 	 * @return mixed
 	 */
-	public final function pop()
+	final public function pop()
 	{
 		if ( count($this->_stack) ) {
 			return array_pop($this->_stack);
