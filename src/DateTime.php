@@ -4,13 +4,14 @@ namespace Diskerror\Utilities;
 
 use DateTime as DT;
 use DateTimeZone;
+use InvalidArgumentException;
 
 /**
  * This class adds convienence methods to the built-in DateTime.
  *
  * Date and time can be passed in with objects or associative arrays.
  *
- * @copyright  Copyright (c) 2011 Reid Woodbury Jr
+ * @copyright  Copyright (c) 2011 Reid Woodbury Jr.
  * @license	   http://www.apache.org/licenses/LICENSE-2.0.html	Apache License, Version 2.0
  */
 class DateTime extends DT
@@ -22,26 +23,24 @@ class DateTime extends DT
 	const STRING_IO_FORMAT_MICRO = 'Y-m-d H:i:s.u';
 
 	/**
-	 * Accepts any DateTime object or;
+	 * Accepts a DateTime object or;
 	 * Adds the ability to pass in an array or object with key names of variable
 	 *	   length but a minimum of 3 characters, upper or lower case.
 	 * See setTime and setDate for more information.
 	 *
 	 * @param object|array|string	$time -OPTIONAL
-	 * @param DateTimeZone|string	$timezone -OPTIONAL
+	 * @param DateTimeZone			$timezone -OPTIONAL
 	 */
 	public function __construct($time = 'now', $timezone = null)
 	{
-		if ( is_string($timezone) ) {
-			$timezone = new DateTimeZone($timezone);
+		if ( !is_a($timezone, 'DateTimeZone') ) {
+			$timezone = new DateTimeZone(date_default_timezone_get());
 		}
 
 		switch ( gettype($time) ) {
 			case 'object':
-			if ( $time instanceof DateTimeInterface ) {
-				foreach ( $time as $k => $v ) {
-					$this->$k = $v;
-				}
+			if ( is_a($time, 'DateTime') ) {
+				parent::__construct($time->format(self::STRING_IO_FORMAT), $time->getTimezone());
 				break;
 			}
 			$time = (array) $time;
@@ -57,7 +56,7 @@ class DateTime extends DT
 			}
 			//	remove AD extra data
 			if ( substr($time, -3) === '.0Z' ) {
-				$time = substr($time, 0, -3);
+				$time = substr($time, 0, 14);
 			}
 			parent::__construct($time, $timezone);
 			break;
@@ -68,7 +67,7 @@ class DateTime extends DT
 			break;
 
 			default:
-			throw new \InvalidArgumentException('first argument is the wrong type: ' . gettype($time));
+			throw new InvalidArgumentException('first argument is the wrong type: ' . gettype($time));
 		}
 	}
 
@@ -76,22 +75,29 @@ class DateTime extends DT
 	 * Create DateTime object defaults to something that will accept
 	 * the default MySQL datetime format of "Y-m-d H:i:s.u".
 	 *
-	 * @param string				$formatOrTime
-	 * @param string				$time -OPTIONAL
-	 * @param DateTimeZone|string	$timezone -OPTIONAL
+	 * @param string		$formatOrTime
+	 * @param string		$time -OPTIONAL
+	 * @param DateTimeZone	$timezone -OPTIONAL
 	 * @return DateTime
 	 */
 	public static function createFromFormat($formatOrTime, $time = '', $timezone = null)
 	{
-		if ( is_string($timezone) ) {
-			$timezone = new DateTimeZone($timezone);
+		if ( $time === '' ) {
+			$parsed = date_parse($formatOrTime);
+		} else {
+			$parsed = date_parse_from_format($formatOrTime, $time);
 		}
 
-		if ( $time == '' ) {
-			return new self( $formatOrTime, $timezone );
+		$d = new self();
+
+		if ( $timezone !== null ) {
+			$d->setTimezone( $timezone );
 		}
 
-		return new self( DT::createFromFormat($formatOrTime, $time, $timezone) );
+		$d->setDate($parsed);
+		$d->setTime($parsed);
+
+		return $d;
 	}
 
 	/**

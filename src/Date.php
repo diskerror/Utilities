@@ -12,7 +12,7 @@ use LogicException;
  *
  * THIS HAS NOT BEEN EXHAUSTIVELY TESTED. Particularly "add()" and "sub()".
  *
- * @copyright  Copyright (c) 2011 Reid Woodbury Jr
+ * @copyright  Copyright (c) 2011 Reid Woodbury Jr.
  * @license	   http://www.apache.org/licenses/LICENSE-2.0.html	Apache License, Version 2.0
  */
 class Date extends \Diskerror\Utilities\DateTime
@@ -102,9 +102,10 @@ class Date extends \Diskerror\Utilities\DateTime
 	 * @param array|int $hou
 	 * @param int $min
 	 * @param int $sec
+	 * @param int $mic
 	 * @throws LogicException
 	 */
-	public function setTime($hou, $min = 0, $sec = 0)
+	public function setTime($hou, $min = 0, $sec = 0, $mic = 0)
 	{
 		throw new LogicException('method not available in Date class');
 	}
