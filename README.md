@@ -1,4 +1,7 @@
-# PHP Utilities
+# Obsolete
+This project is obsolete. Current coding style and wisdom done use registries or singletons. Other features will be moved to other projects.
+
+## PHP Utilities
 
 PHP utilities tested with PHP version 5.4–5.6, 7.1.
 
@@ -14,7 +17,7 @@ PHP utilities tested with PHP version 5.4–5.6, 7.1.
 
 *Curl* wraps the PHP curl functions.
 
-## Composer
+### Composer
 ```
 > composer require diskerror/utilities
 ```
