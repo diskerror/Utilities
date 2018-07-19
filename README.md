@@ -1,5 +1,5 @@
 # Obsolete
-This project is obsolete. Current coding style and wisdom done use registries or singletons. Other features will be moved to other projects.
+This project is obsolete. Current coding style and wisdom don't use registries or singletons that are defined here. Other features will be moved to other projects.
 
 ## PHP Utilities
 
